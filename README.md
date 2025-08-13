@@ -1,47 +1,82 @@
-# Battery Wear Level Check
+# Battery Checker
 
-This repository provides a simple Bash script to check the wear level of your laptop battery on Linux systems.
+>This repository provides Bash scripts to help monitor and manage your laptop battery health on Linux systems.
 
-## What is Battery Wear Level?
-Battery wear level indicates the percentage of battery capacity lost compared to its original design capacity. A higher wear level means your battery holds less charge than when it was new.
+## Table of Contents
+ - [Wear Level Checker](#wear-level-checker)
+ - [Battery Notifier](#battery-notifier)
+ - [Battery Limiter](#battery-limiter)
+ - [Requirements](#requirements)
+ - [Troubleshooting](#troubleshooting)
+ - [License](#license)
 
-## How It Works
-The script reads battery information from `/sys/class/power_supply/BAT0` and calculates the wear level using the following formula:
+---
 
+## Wear Level Checker (`wear_level.sh`)
+Checks the wear level of your battery, indicating the percentage of capacity lost compared to its original design.
+
+**How it works:**
+Reads battery info from `/sys/class/power_supply/BAT0` and calculates:
 ```
 Wear Level (%) = (1 - Current Full Capacity / Design Full Capacity) * 100
 ```
 
-## Usage
+**Usage:**
+```bash
+chmod +x wear_level.sh
+./wear_level.sh
+```
+Output example:
+```
+Battery Wear Level: 7.25%
+```
 
-1. **Clone the repository or download the script:**
-   ```bash
-   git clone https://github.com/rohanraaj2/Battery-Wear-Level-Check.git
-   cd Battery-Wear-Level-Check
-   ```
+---
 
-2. **Make the script executable:**
-   ```bash
-   chmod +x battery_wear.sh
-   ```
+## Battery Notifier (`notifier.sh`)
+Sends a desktop notification and sound alert when the battery is fully charged (80%).
 
-3. **Run the script:**
-   ```bash
-   ./battery_wear.sh
-   ```
+**How it works:**
+Checks battery percentage and status, then uses `notify-send` and `paplay` for alerts.
 
-   You should see output similar to:
-   ```
-   Battery Wear Level: 7.25%
-   ```
+**Usage:**
+```bash
+chmod +x notifier.sh
+./notifier.sh
+```
+You may want to run this script periodically (e.g., via cron or systemd).
+
+---
+
+## Battery Limiter (`limiter.sh`)
+Limits battery charging to 80% for longevity and switches fan mode based on AC/battery status (Dell-specific).
+
+**How it works:**
+- Sets charge threshold to 80% (if supported)
+- Adjusts fan mode using `i8kctl` based on power source
+
+**Usage:**
+```bash
+chmod +x limiter.sh
+./limiter.sh
+```
+This script runs in a loop and may require root privileges for hardware control.
+
+---
 
 ## Requirements
-- Linux system with battery information available at `/sys/class/power_supply/BAT0`
-- `bc` command-line calculator installed
+- Linux system with battery info at `/sys/class/power_supply/BAT0`
+- `bc`, `notify-send`, `paplay`, `acpi`, and (for Dell) `i8kctl` installed
+
+---
 
 ## Troubleshooting
-- If you see `Battery information not found.`, your battery may use a different path (e.g., `BAT1`). Edit the `BAT_PATH` variable in the script accordingly.
-- If you see `Could not read battery capacity info.`, your system may not provide the required files, or you may need to run the script with elevated permissions.
+- If you see `Battery information not found.`, your battery may use a different path (e.g., `BAT1`). Edit the relevant variable in the script.
+- If you see `Could not read battery capacity info.`, your system may not provide the required files, or you may need elevated permissions.
+- For notifications and sound, ensure your desktop environment supports `notify-send` and `paplay`.
+- For Dell fan control, `i8kctl` must be installed and supported.
+
+---
 
 ## License
 This project is licensed under the MIT License.
