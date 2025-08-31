@@ -6,6 +6,7 @@
  - [Wear Level Checker](#wear-level-checker)
  - [Battery Notifier](#battery-notifier)
  - [Battery Limiter](#battery-limiter)
+ - [Battery Lifespan Optimizer](#battery-lifespan-optimizer)
  - [Requirements](#requirements)
  - [Troubleshooting](#troubleshooting)
  - [License](#license)
@@ -61,6 +62,26 @@ chmod +x limiter.sh
 ./limiter.sh
 ```
 This script runs in a loop and may require root privileges for hardware control.
+
+---
+
+## Battery Lifespan Optimizer (`optimize_battery_lifespan.sh`)
+Advanced script to optimize battery lifespan using dynamic thresholds, TLP integration, and systemd automation.
+
+**How it works:**
+- Applies TLP power management settings
+- Dynamically sets battery charge thresholds based on temperature, cycle count, and capacity
+- Disables turbo boost and applies kernel tweaks (if supported)
+- Installs itself as a systemd service and timer for automatic periodic execution
+
+**Usage:**
+```bash
+chmod +x optimize_battery_lifespan.sh
+sudo ./optimize_battery_lifespan.sh
+```
+This script requires root privileges and will reboot the system for kernel changes to take effect.
+
+---
 
 ---
 

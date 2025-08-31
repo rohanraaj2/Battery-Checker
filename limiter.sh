@@ -1,12 +1,10 @@
 #!/bin/bash
 # Dell Inspiron 5410 Long-Life Script
-#  - Limits battery to 80% for longevity
+#  - For battery threshold management, use optimize_battery_lifespan.sh
 #  - Switches fan mode based on AC/Battery status
 
 BATTERY_FILE="/sys/class/power_supply/BAT0/charge_control_end_threshold"
-if [ -f "$BATTERY_FILE" ]; then
-    echo 80 | sudo tee $BATTERY_FILE > /dev/null
-fi
+# Battery threshold logic removed. Use optimize_battery_lifespan.sh for advanced management.
 
 while true; do
     STATUS=$(acpi -a | awk '{print $3}')
