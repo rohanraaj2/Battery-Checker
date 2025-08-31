@@ -1,35 +1,31 @@
 # Battery Checker
 
->This repository provides Bash scripts to help monitor and manage your laptop battery health on Linux systems.
+>This repository provides Bash scripts to help monitor and manage your laptop battery health on Linux systems. All scripts now use a shared utility file (`battery_utils.sh`) for common functions.
 
 ## Table of Contents
  - [Wear Level Checker](#wear-level-checker)
  - [Battery Notifier](#battery-notifier)
  - [Battery Limiter](#battery-limiter)
  - [Battery Lifespan Optimizer](#battery-lifespan-optimizer)
+ - [Shared Utilities](#shared-utilities)
  - [Requirements](#requirements)
  - [Troubleshooting](#troubleshooting)
  - [License](#license)
 
 ---
 
-## Wear Level Checker (`wear_level.sh`)
-Checks the wear level of your battery, indicating the percentage of capacity lost compared to its original design.
+## Shared Utilities (`battery_utils.sh`)
+Common functions for battery management, such as TLP configuration, turbo boost control, kernel tweaks, dynamic battery thresholds, and systemd setup. All main scripts source this file for modularity and code reuse.
 
-**How it works:**
-Reads battery info from `/sys/class/power_supply/BAT0` and calculates:
-```
-Wear Level (%) = (1 - Current Full Capacity / Design Full Capacity) * 100
-```
+---
+
+## Wear Level Checker (`wear_level.sh`)
+Calculates and displays the battery wear level (percentage of capacity lost compared to original design).
 
 **Usage:**
 ```bash
 chmod +x wear_level.sh
 ./wear_level.sh
-```
-Output example:
-```
-Battery Wear Level: 7.25%
 ```
 
 ---
@@ -37,51 +33,33 @@ Battery Wear Level: 7.25%
 ## Battery Notifier (`notifier.sh`)
 Sends a desktop notification and sound alert when the battery is fully charged (80%).
 
-**How it works:**
-Checks battery percentage and status, then uses `notify-send` and `paplay` for alerts.
-
 **Usage:**
 ```bash
 chmod +x notifier.sh
 ./notifier.sh
 ```
-You may want to run this script periodically (e.g., via cron or systemd).
 
 ---
 
 ## Battery Limiter (`limiter.sh`)
-Limits battery charging to 80% for longevity and switches fan mode based on AC/battery status (Dell-specific).
-
-**How it works:**
-- Sets charge threshold to 80% (if supported)
-- Adjusts fan mode using `i8kctl` based on power source
+Sets battery charge thresholds using shared logic from `battery_utils.sh`.
 
 **Usage:**
 ```bash
 chmod +x limiter.sh
 ./limiter.sh
 ```
-This script runs in a loop and may require root privileges for hardware control.
 
 ---
 
 ## Battery Lifespan Optimizer (`optimize_battery_lifespan.sh`)
-Advanced script to optimize battery lifespan using dynamic thresholds, TLP integration, and systemd automation.
-
-**How it works:**
-- Applies TLP power management settings
-- Dynamically sets battery charge thresholds based on temperature, cycle count, and capacity
-- Disables turbo boost and applies kernel tweaks (if supported)
-- Installs itself as a systemd service and timer for automatic periodic execution
+Advanced script that dynamically manages battery charge thresholds, applies TLP power management, disables turbo boost, tweaks kernel settings, and sets up a systemd service/timer for automatic execution. Uses all shared utilities.
 
 **Usage:**
 ```bash
 chmod +x optimize_battery_lifespan.sh
 sudo ./optimize_battery_lifespan.sh
 ```
-This script requires root privileges and will reboot the system for kernel changes to take effect.
-
----
 
 ---
 

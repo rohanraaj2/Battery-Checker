@@ -3,8 +3,12 @@
 #  - For battery threshold management, use optimize_battery_lifespan.sh
 #  - Switches fan mode based on AC/Battery status
 
-BATTERY_FILE="/sys/class/power_supply/BAT0/charge_control_end_threshold"
-# Battery threshold logic removed. Use optimize_battery_lifespan.sh for advanced management.
+source "$(dirname "$0")/battery_utils.sh"
+
+BAT_PATH="/sys/class/power_supply/BAT0"
+
+# Only sets battery thresholds
+set_dynamic_battery_thresholds "$BAT_PATH"
 
 while true; do
     STATUS=$(acpi -a | awk '{print $3}')
